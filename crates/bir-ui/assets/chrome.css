@@ -922,3 +922,92 @@ html, body { font-size: 13px; letter-spacing: .005em; }
 :root[data-tabs="vertical"] .toolbar .icon-button { width: 30px; height: 30px; }
 :root[data-tabs="vertical"] .omnibox { flex: 1 1 100%; min-width: 0; }
 :root[data-tabs="vertical"] .toolbar-right { margin-left: auto; }
+
+
+/* BIR visual polish pass — stronger hierarchy, deliberate spacing, and consistent controls. */
+:root {
+  --accent: #7558df;
+  --accent-soft: rgba(117, 88, 223, .12);
+  --bg: #f4f1fb;
+  --bg-elevated: #fff;
+  --bg-sunken: #ebe6f7;
+  --bg-hover: rgba(99, 76, 170, .075);
+  --bg-active: rgba(99, 76, 170, .13);
+  --fg: #28243a;
+  --fg-dim: #827b99;
+  --border: rgba(69, 53, 115, .13);
+  --shadow: 0 16px 42px rgba(44, 31, 83, .16);
+}
+:root[data-theme="dark"] {
+  --accent: #b6a1ff;
+  --accent-soft: rgba(182, 161, 255, .15);
+  --bg: #191722;
+  --bg-elevated: #262333;
+  --bg-sunken: #13111c;
+  --bg-hover: rgba(208, 195, 255, .08);
+  --bg-active: rgba(208, 195, 255, .14);
+  --fg: #f3efff;
+  --fg-dim: #aaa2c3;
+  --border: rgba(218, 207, 255, .12);
+  --shadow: 0 16px 42px rgba(0, 0, 0, .38);
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] {
+    --accent: #b6a1ff;
+    --accent-soft: rgba(182, 161, 255, .15);
+    --bg: #191722;
+    --bg-elevated: #262333;
+    --bg-sunken: #13111c;
+    --bg-hover: rgba(208, 195, 255, .08);
+    --bg-active: rgba(208, 195, 255, .14);
+    --fg: #f3efff;
+    --fg-dim: #aaa2c3;
+    --border: rgba(218, 207, 255, .12);
+    --shadow: 0 16px 42px rgba(0, 0, 0, .38);
+  }
+}
+button { -webkit-tap-highlight-color: transparent; }
+.icon-button { transition: background 150ms ease, color 150ms ease, transform 150ms ease; }
+.icon-button:active:not(:disabled) { transform: scale(.94); }
+.tabstrip { position: relative; }
+.tabstrip::after { content: ""; position: absolute; inset: auto 12px 0; height: 1px; background: var(--border); pointer-events: none; }
+.tab { min-width: 0; }
+.tab.active { position: relative; }
+.tab.active .tab-favicon { box-shadow: 0 0 0 2px var(--accent-soft); }
+.tab-close { transition: opacity 120ms ease, background 120ms ease; }
+#new-tab { transition: background 140ms ease, border-color 140ms ease, transform 140ms ease; }
+#new-tab:active { transform: scale(.97); }
+.toolbar { position: relative; }
+.toolbar .icon-button { flex-shrink: 0; }
+.omnibox { min-width: 0; transition: background 150ms ease, border-color 150ms ease, box-shadow 150ms ease; }
+.omnibox-icon { color: var(--accent); }
+.omnibox-input::placeholder { color: var(--fg-dim); opacity: .85; }
+.omnibox-star { color: var(--fg-dim); }
+.omnibox-star:hover { color: var(--accent); }
+.ext-button { transition: background 140ms ease, transform 140ms ease; }
+.ext-button:active { transform: scale(.94); }
+.suggestions, .menu-panel, .popup, .permission, .findbar { backdrop-filter: blur(18px); }
+.menu-item { transition: background 100ms ease, color 100ms ease; }
+.menu-item:hover { background: var(--bg-hover); }
+.progress { height: 2px; }
+.progress > i { box-shadow: 0 0 9px rgba(151, 117, 255, .45); }
+.findbar { padding: 7px; gap: 6px; }
+.find-input { border-radius: 9px; }
+.toast { box-shadow: var(--shadow); }
+:root[data-tabs="vertical"] .tabstrip::after { inset: 8px 8px 0; }
+:root[data-tabs="vertical"] .tabstrip { background: linear-gradient(180deg, var(--bg-elevated), var(--bg)); }
+:root[data-tabs="vertical"] #new-tab { border-color: var(--border); background: var(--bg-elevated); }
+:root[data-tabs="vertical"] #new-tab:hover { border-color: var(--accent); background: var(--accent-soft); }
+:root[data-tabs="vertical"] .tabs { padding-top: 3px; }
+:root[data-tabs="vertical"] .tab { margin: 1px 0; }
+:root[data-tabs="vertical"] .tab.active { background: color-mix(in srgb, var(--accent-soft) 70%, var(--bg-elevated)); }
+:root[data-tabs="vertical"] .toolbar { border-top: 1px solid var(--border); }
+:root[data-tabs="vertical"] .omnibox { box-shadow: 0 3px 12px rgba(30, 22, 55, .05), inset 0 0 0 1px var(--border); }
+@media (max-width: 440px) {
+  :root[data-tabs="vertical"] .toolbar { padding: 6px; }
+  :root[data-tabs="vertical"] .toolbar .icon-button { width: 28px; height: 28px; }
+  :root[data-tabs="vertical"] .tabstrip { padding: 8px 6px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
