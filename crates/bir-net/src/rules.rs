@@ -67,7 +67,7 @@ impl ContentType {
       "stylesheet" | "css" => ContentType::Stylesheet,
       "object" | "object-subrequest" => ContentType::Object,
       "xmlhttprequest" | "xhr" => ContentType::XmlHttpRequest,
-      "subdocument" | "sub_frame" | "frame" => ContentType::SubDocument,
+      "subdocument" | "sub_frame" => ContentType::SubDocument,
       "font" => ContentType::Font,
       "media" => ContentType::Media,
       "websocket" => ContentType::WebSocket,
