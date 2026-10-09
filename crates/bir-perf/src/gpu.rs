@@ -184,7 +184,7 @@ fn detect_notes() -> Vec<String> {
   notes
 }
 
-#[cfg(target_family = "unix")]
+#[cfg(all(target_family = "unix", not(target_vendor = "apple")))]
 fn has_drm_device() -> bool {
   std::path::Path::new("/dev/dri").exists()
 }
