@@ -501,3 +501,141 @@ button { font: inherit; color: inherit; }
   padding: 6px 4px;
 }
 :root[data-tabs="vertical"] .omnibox { flex: 1 1 100%; }
+
+
+/* ------------------------------------------------------------------
+   Refined BIR chrome: softer surfaces, clearer focus, calmer controls.
+   Kept as overrides so the existing behaviour and layout stay intact.
+------------------------------------------------------------------- */
+:root {
+  --accent: #4778f5;
+  --radius: 9px;
+  --bg: #f4f6fa;
+  --bg-elevated: #ffffff;
+  --bg-sunken: #e9edf5;
+  --bg-hover: rgba(52, 75, 120, .08);
+  --bg-active: rgba(52, 75, 120, .14);
+  --fg: #202534;
+  --fg-dim: #737d91;
+  --border: rgba(35, 48, 75, .12);
+  --shadow: 0 12px 34px rgba(20, 31, 55, .16);
+  --tab-active-bg: #fff;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] {
+    --bg: #171a21;
+    --bg-elevated: #222732;
+    --bg-sunken: #11141a;
+    --bg-hover: rgba(255,255,255,.075);
+    --bg-active: rgba(255,255,255,.12);
+    --fg: #edf1fa;
+    --fg-dim: #9ca7ba;
+    --border: rgba(220,230,250,.11);
+    --shadow: 0 12px 34px rgba(0,0,0,.38);
+    --tab-active-bg: #303746;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #171a21;
+  --bg-elevated: #222732;
+  --bg-sunken: #11141a;
+  --bg-hover: rgba(255,255,255,.075);
+  --bg-active: rgba(255,255,255,.12);
+  --fg: #edf1fa;
+  --fg-dim: #9ca7ba;
+  --border: rgba(220,230,250,.11);
+  --shadow: 0 12px 34px rgba(0,0,0,.38);
+  --tab-active-bg: #303746;
+}
+button { transition: background-color 120ms ease, color 120ms ease, opacity 120ms ease; }
+.tabstrip {
+  gap: 6px;
+  padding: 5px 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.tabs { gap: 4px; align-items: flex-end; }
+.tab {
+  height: calc(var(--strip) - 7px);
+  padding: 0 11px;
+  gap: 8px;
+  border-radius: 9px 9px 0 0;
+  color: var(--fg-dim);
+  transition: background-color 120ms ease, color 120ms ease;
+}
+.tab:hover { color: var(--fg); }
+.tab.active {
+  color: var(--fg);
+  box-shadow: 0 -1px 0 rgba(255,255,255,.45), 0 1px 0 var(--tab-active-bg);
+}
+.tab.active::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 0;
+  height: 2px;
+  border-radius: 0 0 3px 3px;
+  background: var(--accent);
+}
+.tab-title { font-size: 12px; }
+.tab-close { border-radius: 5px; }
+#new-tab {
+  width: 26px;
+  height: 26px;
+  margin: 0 2px 3px 0;
+  border-radius: 8px;
+  color: var(--fg-dim);
+  font-size: 18px;
+}
+.toolbar {
+  gap: 5px;
+  padding: 0 10px;
+}
+.toolbar .icon-button {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  color: var(--fg-dim);
+}
+.toolbar .icon-button:hover:not(:disabled) { color: var(--fg); }
+.omnibox {
+  height: 32px;
+  padding: 0 9px;
+  border-radius: 11px;
+  background: var(--bg-elevated);
+  border-color: transparent;
+  box-shadow: inset 0 0 0 1px var(--border);
+  transition: box-shadow 140ms ease, background-color 140ms ease;
+}
+.omnibox:focus-within {
+  border-color: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--accent), 0 0 0 3px rgba(71,120,245,.10);
+}
+.omnibox-input { font-size: 13px; }
+.omnibox-icon { font-size: 14px; }
+.toolbar-right { gap: 4px; }
+.ext-button { border-radius: 8px; }
+.suggestions, .menu-panel, .popup, .permission, .findbar {
+  border-color: var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+.icon-button:focus-visible, .tab:focus-visible, button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.progress > i { background: linear-gradient(90deg, #4778f5, #7a65f7); }
+:root[data-tabs="vertical"] .tabstrip { padding: 8px 6px; }
+:root[data-tabs="vertical"] .tab {
+  border-radius: 8px;
+  height: 34px;
+}
+:root[data-tabs="vertical"] .tab.active::before {
+  left: 0;
+  right: auto;
+  top: 7px;
+  bottom: 7px;
+  width: 3px;
+  height: auto;
+  border-radius: 0 3px 3px 0;
+}
