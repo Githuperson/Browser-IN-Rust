@@ -1,0 +1,18 @@
+[package]
+name = "bir-ext"
+description = "WebExtensions host: MV3 manifest parsing, CRX3 packaging, content scripts, background workers and the browser.* API bridge."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+bir-core.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+url.workspace = true
+thiserror.workspace = true
+sha2.workspace = true
+zip.workspace = true

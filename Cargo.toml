@@ -1,0 +1,60 @@
+# BIR — Browser in Rust
+#
+# Workspace layout:
+#   crates/bir-core  engine-independent browser data model (settings, history, bookmarks, ...)
+#   crates/bir-net   content blocking engine (filter lists, tracker classification, cosmetics)
+#   crates/bir-perf  memory/CPU governance: sampling, tab sleeping, discarding, GPU policy
+#   crates/bir-ext   WebExtensions host: MV3 manifests, CRX3, content scripts, API bridge
+#   crates/bir-ui    the actual browser shell (tao window + wry webviews + HTML chrome)
+#   crates/bir       executable entry point / CLI
+[workspace]
+resolver = "2"
+members = ["crates/*"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+license = "MIT"
+repository = "https://github.com/Githuperson/Browser-IN-Rust"
+authors = ["Githuperson"]
+
+[workspace.dependencies]
+# --- pinned hard: these two crates move fast and their APIs break between minors.
+#     Everything else is allowed to float within semver.
+wry = { version = "=0.57.0", features = ["devtools"] }
+tao = "=0.37.1"
+
+# --- common, stable crates
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+url = "2.5"
+dirs = "5"
+sha2 = "0.10"
+zip = "2"
+ureq = "3"
+thiserror = "2"
+sysinfo = "0.35"
+
+# --- workspace members
+bir-core = { path = "crates/bir-core" }
+bir-net = { path = "crates/bir-net" }
+bir-perf = { path = "crates/bir-perf" }
+bir-ext = { path = "crates/bir-ext" }
+bir-ui = { path = "crates/bir-ui" }
+
+# --- platform specific (Linux only: we build webviews into a GtkFixed container so
+#     that Wayland works the same way X11 does)
+[workspace.dependencies.gtk]
+version = "0.18"
+features = ["v3_24"]
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+panic = "abort"
+strip = true
+
+[profile.dev]
+opt-level = 1

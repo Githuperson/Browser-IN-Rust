@@ -1,0 +1,63 @@
+<!doctype html>
+<!--
+  The browser chrome.
+
+  This document is a normal web page: no custom widgets, no toolkit bindings. It is a
+  96-pixel strip at the top of the window, and everything below it is the page.
+
+  It talks to Rust over `window.ipc.postMessage()` and listens with `bir.onEvent()`.
+-->
+<html lang="en" data-theme="system">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' bir: data:; script-src 'self' bir:; style-src 'self' bir: 'unsafe-inline'; img-src 'self' bir: data: https:; font-src 'self' bir: data:">
+<title>BIR</title>
+<link rel="stylesheet" href="bir://chrome.css">
+</head>
+<body>
+
+<div id="tabstrip" class="tabstrip">
+  <div id="tabs" class="tabs" role="tablist"></div>
+  <button id="new-tab" class="icon-button" title="New tab (Ctrl+T)" aria-label="New tab">+</button>
+</div>
+
+<div id="toolbar" class="toolbar">
+  <button id="back" class="icon-button" title="Back" aria-label="Back" disabled>‹</button>
+  <button id="forward" class="icon-button" title="Forward" aria-label="Forward" disabled>›</button>
+  <button id="reload" class="icon-button" title="Reload (Ctrl+R)" aria-label="Reload">⟳</button>
+  <button id="home" class="icon-button" title="Home" aria-label="Home">⌂</button>
+
+  <div id="omnibox" class="omnibox">
+    <span id="omnibox-icon" class="omnibox-icon" title="Connection info">•</span>
+    <input id="omnibox-input" class="omnibox-input" type="text" spellcheck="false"
+           autocomplete="off" placeholder="Search or type a URL" aria-label="Address bar">
+    <button id="omnibox-star" class="icon-button omnibox-star" title="Bookmark this page">☆</button>
+    <div id="suggestions" class="suggestions" hidden></div>
+  </div>
+
+  <div id="ext-buttons" class="ext-buttons"></div>
+
+  <div class="toolbar-right">
+    <button id="downloads" class="icon-button" title="Downloads (Ctrl+J)" aria-label="Downloads">↓</button>
+    <button id="menu" class="icon-button" title="Menu" aria-label="Menu">☰</button>
+  </div>
+</div>
+
+<div id="progress" class="progress" hidden></div>
+
+<div id="findbar" class="findbar" hidden>
+  <input id="find-input" class="find-input" type="text" placeholder="Find in page" spellcheck="false">
+  <span id="find-count" class="find-count"></span>
+  <button id="find-prev" class="icon-button" title="Previous match">↑</button>
+  <button id="find-next" class="icon-button" title="Next match">↓</button>
+  <button id="find-close" class="icon-button" title="Close (Esc)">×</button>
+</div>
+
+<div id="popup" class="popup" hidden></div>
+<div id="menu-panel" class="menu-panel" hidden></div>
+<div id="permission" class="permission" hidden></div>
+<div id="toasts" class="toasts"></div>
+
+<script src="bir://chrome.js"></script>
+</body>
+</html>

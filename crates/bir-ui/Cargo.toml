@@ -1,0 +1,27 @@
+[package]
+name = "bir-ui"
+description = "The BIR browser shell: tao windows, wry webviews, the HTML chrome and internal pages."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+bir-core.workspace = true
+bir-net.workspace = true
+bir-perf.workspace = true
+bir-ext.workspace = true
+
+wry.workspace = true
+tao.workspace = true
+
+serde.workspace = true
+serde_json.workspace = true
+url.workspace = true
+dirs.workspace = true
+thiserror.workspace = true
+
+[target.'cfg(any(target_os = "linux", target_os = "dragonfly", target_os = "freebsd", target_os = "netbsd", target_os = "openbsd"))'.dependencies]
+gtk.workspace = true

@@ -1,0 +1,18 @@
+[package]
+name = "bir-net"
+description = "Content blocking engine: Adblock-style rule parsing, tokenised matching, cosmetic filtering and in-page blocking script generation."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+bir-core.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+url.workspace = true
+thiserror.workspace = true
+# Only used to refresh remote filter lists and favicons. Isolated in `fetch.rs`.
+ureq.workspace = true

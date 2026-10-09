@@ -1,0 +1,503 @@
+/*
+ * Chrome styles.
+ *
+ * Theming is a single `data-theme` attribute on <html>:
+ *   system  → follow prefers-color-scheme (the default)
+ *   light   → force light
+ *   dark    → force dark
+ * Rust sets it in an init script, before this document paints, so there is no flash.
+ *
+ * The chrome is fixed-height and never scrolls: it is a strip, and the page below it
+ * owns the rest of the window.
+ */
+
+:root {
+  --accent: #3b6cf6;
+  --radius: 8px;
+  --strip: 36px;
+  --bar: 44px;
+
+  --bg: #f3f3f6;
+  --bg-elevated: #ffffff;
+  --bg-sunken: #e6e6ec;
+  --bg-hover: rgba(0, 0, 0, 0.06);
+  --bg-active: rgba(0, 0, 0, 0.10);
+  --fg: #1c1c1f;
+  --fg-dim: #5f5f6b;
+  --border: rgba(0, 0, 0, 0.12);
+  --shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
+  --tab-bg: transparent;
+  --tab-active-bg: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] {
+    --bg: #1b1b1f;
+    --bg-elevated: #26262d;
+    --bg-sunken: #141418;
+    --bg-hover: rgba(255, 255, 255, 0.07);
+    --bg-active: rgba(255, 255, 255, 0.12);
+    --fg: #e8e8ee;
+    --fg-dim: #a0a0ad;
+    --border: rgba(255, 255, 255, 0.12);
+    --shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
+    --tab-active-bg: #33333c;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #1b1b1f;
+  --bg-elevated: #26262d;
+  --bg-sunken: #141418;
+  --bg-hover: rgba(255, 255, 255, 0.07);
+  --bg-active: rgba(255, 255, 255, 0.12);
+  --fg: #e8e8ee;
+  --fg-dim: #a0a0ad;
+  --border: rgba(255, 255, 255, 0.12);
+  --shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
+  --tab-active-bg: #33333c;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--fg);
+  font: 13px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+/* Compact mode: denser chrome for small windows. */
+:root[data-compact="true"] { --strip: 30px; --bar: 36px; font-size: 12px; }
+
+button { font: inherit; color: inherit; }
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--fg);
+  font-size: 15px;
+  line-height: 1;
+  cursor: default;
+}
+.icon-button:hover:not(:disabled) { background: var(--bg-hover); }
+.icon-button:active:not(:disabled) { background: var(--bg-active); }
+.icon-button:disabled { color: var(--fg-dim); opacity: 0.45; }
+
+/* ------------------------------------------------------------------ tab strip */
+
+.tabstrip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: var(--strip);
+  padding: 0 4px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+
+.tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: calc(var(--strip) - 8px);
+  min-width: 40px;
+  max-width: 220px;
+  padding: 0 8px;
+  border-radius: var(--radius);
+  background: var(--tab-bg);
+  cursor: default;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.tab:hover { background: var(--bg-hover); }
+.tab.active { background: var(--tab-active-bg); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12); }
+.tab.pinned { max-width: 40px; min-width: 40px; justify-content: center; padding: 0; }
+.tab.discarded { opacity: 0.55; }
+.tab.sleeping .tab-title { font-style: italic; opacity: 0.7; }
+
+.tab-favicon {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  border-radius: 3px;
+  background: var(--bg-sunken);
+  object-fit: cover;
+}
+.tab-favicon[data-empty="true"] { visibility: hidden; width: 0; }
+
+.tab-title {
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 12px;
+}
+.tab-audible, .tab-muted {
+  flex: 0 0 auto;
+  font-size: 11px;
+  color: var(--fg-dim);
+}
+.tab-close {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--fg-dim);
+  font-size: 13px;
+  line-height: 1;
+  padding: 0;
+  opacity: 0;
+}
+.tab:hover .tab-close, .tab.active .tab-close { opacity: 1; }
+.tab-close:hover { background: var(--bg-active); color: var(--fg); }
+
+.tab-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width 120ms linear;
+}
+
+/* ------------------------------------------------------------------ toolbar */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: var(--bar);
+  padding: 0 6px;
+  background: var(--bg);
+}
+
+.omnibox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1 1 auto;
+  min-width: 80px;
+  height: 30px;
+  padding: 0 6px;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: var(--bg-elevated);
+}
+.omnibox:focus-within { border-color: var(--accent); }
+
+.omnibox-icon {
+  flex: 0 0 auto;
+  width: 16px;
+  text-align: center;
+  color: var(--fg-dim);
+  font-size: 12px;
+}
+.omnibox-icon[data-secure="true"] { color: #1a9c4b; }
+.omnibox-icon[data-insecure="true"] { color: #c2402d; }
+
+.omnibox-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--fg);
+  font: inherit;
+  -webkit-user-select: text;
+  user-select: text;
+  cursor: text;
+}
+.omnibox-star { width: 22px; height: 22px; font-size: 14px; color: var(--fg-dim); }
+.omnibox-star[data-starred="true"] { color: #f0b429; }
+
+.suggestions {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: -1px;
+  right: -1px;
+  z-index: 30;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow);
+}
+
+.suggestion {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: default;
+}
+.suggestion:hover, .suggestion.selected { background: var(--bg-hover); }
+.suggestion-icon {
+  width: 16px;
+  text-align: center;
+  flex: 0 0 auto;
+  color: var(--fg-dim);
+}
+.suggestion-body { flex: 1 1 auto; min-width: 0; }
+.suggestion-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.suggestion-subtitle {
+  font-size: 11px;
+  color: var(--fg-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ext-buttons { display: flex; align-items: center; gap: 2px; }
+.ext-button {
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  font-size: 13px;
+  cursor: default;
+  overflow: hidden;
+  padding: 0;
+}
+.ext-button:hover { background: var(--bg-hover); }
+.ext-button span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toolbar-right { display: flex; align-items: center; gap: 2px; flex: 0 0 auto; }
+
+.progress {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: transparent;
+}
+.progress > i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  transition: width 120ms linear;
+}
+
+/* ------------------------------------------------------------------ find bar */
+
+.findbar {
+  position: fixed;
+  top: 8px;
+  right: 12px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow);
+}
+.find-input {
+  width: 180px;
+  height: 24px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--fg);
+  font: inherit;
+  -webkit-user-select: text;
+  user-select: text;
+  cursor: text;
+}
+.find-count { font-size: 11px; color: var(--fg-dim); min-width: 54px; text-align: right; }
+
+/* ------------------------------------------------------------------ popups */
+
+.popup {
+  position: fixed;
+  top: calc(var(--strip) + var(--bar) + 2px);
+  right: 8px;
+  z-index: 50;
+  width: 340px;
+  max-height: 520px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.popup iframe {
+  display: block;
+  width: 100%;
+  height: 420px;
+  border: 0;
+  background: var(--bg-elevated);
+}
+
+.menu-panel {
+  position: fixed;
+  top: calc(var(--strip) + var(--bar) + 2px);
+  right: 8px;
+  z-index: 50;
+  min-width: 260px;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow);
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  text-align: left;
+  cursor: default;
+}
+.menu-item:hover { background: var(--bg-hover); }
+.menu-item .shortcut { font-size: 11px; color: var(--fg-dim); }
+.menu-separator { height: 1px; margin: 5px 4px; background: var(--border); }
+.menu-label { padding: 6px 10px 2px; font-size: 11px; color: var(--fg-dim); }
+
+/* ------------------------------------------------------------------ prompts */
+
+.permission {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow);
+}
+.permission-text { max-width: 420px; }
+.permission-text b { font-weight: 600; }
+
+.pill {
+  padding: 5px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-sunken);
+  cursor: default;
+}
+.pill.primary { background: var(--accent); border-color: transparent; color: #fff; }
+.pill:hover { filter: brightness(1.06); }
+
+/* ------------------------------------------------------------------ toasts */
+
+.toasts {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+  pointer-events: none;
+}
+.toast {
+  max-width: 380px;
+  padding: 9px 14px;
+  border-radius: 10px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  white-space: pre-wrap;
+  animation: toast-in 140ms ease-out;
+}
+.toast[data-kind="success"] { border-left: 3px solid #1a9c4b; }
+.toast[data-kind="warning"] { border-left: 3px solid #d99a1a; }
+.toast[data-kind="error"] { border-left: 3px solid #c2402d; }
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ------------------------------------------------------------------ vertical tabs */
+
+/* In vertical mode the chrome webview is a sidebar: the strip scrolls, the toolbar
+   stacks underneath it. Both are laid out by Rust (see `attach::layout`). */
+:root[data-tabs="vertical"] body { display: flex; flex-direction: column; }
+:root[data-tabs="vertical"] .tabstrip {
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  height: auto;
+  max-height: 60%;
+  padding: 4px;
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+:root[data-tabs="vertical"] .tabs {
+  flex-direction: column;
+  align-items: stretch;
+  overflow-x: visible;
+  overflow-y: auto;
+  gap: 2px;
+}
+:root[data-tabs="vertical"] .tab { max-width: none; height: 30px; }
+:root[data-tabs="vertical"] .tab.pinned { max-width: none; }
+:root[data-tabs="vertical"] .toolbar {
+  height: auto;
+  flex-wrap: wrap;
+  padding: 6px 4px;
+}
+:root[data-tabs="vertical"] .omnibox { flex: 1 1 100%; }

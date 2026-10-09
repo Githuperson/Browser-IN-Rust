@@ -1,0 +1,178 @@
+! BIR baseline tracker list — ships with the browser.
+!
+! Scope: analytics, session recording, marketing attribution and cross-site identity
+! resolution. These are the requests that follow you between sites rather than the ones
+! that show you an ad.
+!
+! Nothing here is required for a site to *work*. If a site depends on one of these hosts
+! for a feature you need, use the per-site "disable blocking" toggle rather than turning
+! the whole list off.
+
+! --- Google ---
+||google-analytics.com^
+||ssl.google-analytics.com^
+||analytics.google.com^
+||googletagmanager.com^
+||region1.google-analytics.com^
+||analytics.youtube.com^
+||gstatic.com/gampad/ads^
+
+! --- Adobe / enterprise analytics ---
+||demdex.net^
+||omtrdc.net^
+||2o7.net^
+||adobedtm.com^
+||sc.omtrdc.net^
+||assets.adobedtm.com^
+||everesttech.net^
+||t.co^
+
+! --- Product analytics ---
+||segment.io^
+||segment.com^
+||cdn.segment.com^
+||api.segment.io^
+||mixpanel.com^
+||cdn.mxpnl.com^
+||api.mixpanel.com^
+||amplitude.com^
+||cdn.amplitude.com^
+||api.amplitude.com^
+||heap.io^
+||heapanalytics.com^
+||cdn.heapanalytics.com^
+||posthog.com^
+||app.posthog.com^
+||plausible.io^
+||umami.is^
+||matomo.cloud^
+||piwik.pro^
+
+! --- Session recording and heatmaps ---
+||hotjar.com^
+||static.hotjar.com^
+||script.hotjar.com^
+||vars.hotjar.com^
+||in.hotjar.com^
+||fullstory.com^
+||rs.fullstory.com^
+||edge.fullstory.com^
+||mouseflow.com^
+||clarity.ms^
+||c.clarity.ms^
+||luckyorange.com^
+||cdn.luckyorange.net^
+||inspectlet.com^
+||hn.inspectlet.com^
+||crazyegg.com^
+||script.crazyegg.com^
+||sessioncam.com^
+||smartlook.com^
+||rec.smartlook.com^
+
+! --- Attribution and affiliate networks ---
+||branch.io^
+||app.link^
+||cdn.branch.io^
+||appsflyer.com^
+||adjust.com^
+||app.adjust.com^
+||singular.net^
+||kochava.com^
+||impact.com^
+||cj.com^
+||shareasale.com^
+||awin.com^
+||rakutenmarketing.com^
+
+! --- Social pixels ---
+||connect.facebook.net^
+||facebook.com/tr^
+||pixel.facebook.com^
+||snap.licdn.com^
+||px.ads.linkedin.com^
+||analytics.tiktok.com^
+||analytics.pinterest.com^
+||static.ads-twitter.com^
+||analytics.twitter.com^
+||t.co/i^
+||bat.bing.com/action^
+||ct.pinterest.com^
+||vk.com/rtrg^
+||mc.yandex.ru^
+||metrika.yandex.ru^
+||top-fwz1.mail.ru^
+
+! --- Tag managers and CDPs ---
+||googletagmanager.com/gtm.js^
+||tagmanager.google.com^
+||tealium.com^
+||tags.tiqcdn.com^
+||collect.tealiumiq.com^
+||ensighten.com^
+||nexus.ensighten.com^
+||dynatrace.com^
+||newrelic.com^
+||nr-data.net^
+||js-agent.newrelic.com^
+||bam.nr-data.net^
+||datadoghq-browser-agent.com^
+||rum-collector.pingdom.net^
+||pa.rum.raasnet.com^
+
+! --- Error reporting (privacy-relevant when it ships PII off-site) ---
+||bugsnag.com^
+||sentry.io^
+||browser.sentry-cdn.com^
+||rollbar.com^
+||trackjs.com^
+
+! --- Advertising/identity plumbing ---
+||id5-sync.com^
+||criteo.com/delivery^
+||static.criteo.net^
+||uidapi.com^
+||thetradedesk.com^
+||adsrvr.org^
+||openx.net^
+||pubmatic.com^
+||rubiconproject.com^
+||casalemedia.com^
+||adnxs.com^
+||scorecardresearch.com^
+||quantserve.com^
+||pixel.quantserve.com^
+||secure.quantserve.com^
+||chartbeat.com^
+||ping.chartbeat.net^
+||parsely.com^
+||cdn.parsely.com^
+||statcounter.com^
+||clicky.com^
+||in.getclicky.com^
+||clicktale.net^
+||az416426.vo.msecnd.net^
+||bat-r.com^
+||bidgencmp.com^
+||cdn.branch.io^
+
+! --- Consent-management popups (blocking them does not reject consent; it stops the
+! --- script from injecting a banner that then tracks you) ---
+||consensu.org^
+||cdn.privacy-mgmt.com^
+||privacy-mgmt.com^
+||cookiepro.com^
+||onetrust.com^
+||cdn.cookielaw.org^
+||geolocation.onetrust.com^
+||trustarc.com^
+||consentmanager.net^
+||cdn.consentmanager.net^
+||quantcast.com^
+||cmp.quantcast.com^
+
+! --- Tracking-parameter paths (defence in depth; the shell also strips these from
+! --- navigation URLs before the request is made) ---
+||*/collect?v=1*
+||*/r/collect*
+||*/j/collect*

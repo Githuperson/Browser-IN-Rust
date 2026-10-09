@@ -1,0 +1,36 @@
+<!doctype html>
+<!--
+  Shell for every internal page (bir://newtab, bir://history, bir://settings, ...).
+
+  One document renders all of them: the page name is baked into `data-page` by the
+  protocol handler, and `page.js` renders the matching section. Internal pages are
+  ordinary web content, so they get text selection, find-in-page and the platform's
+  own accessibility support for free.
+-->
+<html lang="en" data-theme="system">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' bir: data:; script-src 'self' bir:; style-src 'self' bir: 'unsafe-inline'; img-src 'self' bir: data: https:;">
+<title>BIR</title>
+<link rel="stylesheet" href="bir://page.css">
+</head>
+<body data-page="{{PAGE}}">
+
+<header class="page-header">
+  <div class="brand">BIR</div>
+  <nav class="nav">
+    <button data-nav="newtab">New tab</button>
+    <button data-nav="history">History</button>
+    <button data-nav="bookmarks">Bookmarks</button>
+    <button data-nav="downloads">Downloads</button>
+    <button data-nav="extensions">Extensions</button>
+    <button data-nav="settings">Settings</button>
+    <button data-nav="about">About</button>
+  </nav>
+</header>
+
+<main id="content" class="content"></main>
+
+<script src="bir://page.js"></script>
+</body>
+</html>

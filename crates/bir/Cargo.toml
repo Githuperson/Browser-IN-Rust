@@ -1,0 +1,25 @@
+[package]
+name = "bir"
+description = "BIR — a fast, low-memory browser built on the system webview, in Rust."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[[bin]]
+name = "bir"
+path = "src/main.rs"
+
+[dependencies]
+bir-core.workspace = true
+bir-ext.workspace = true
+bir-net.workspace = true
+bir-perf.workspace = true
+bir-ui.workspace = true
+
+tao.workspace = true
+
+anyhow = "1"
+clap = { version = "4", default-features = false, features = ["std", "help", "usage", "error-context", "suggestions"] }
