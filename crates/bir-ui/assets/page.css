@@ -560,3 +560,84 @@ body[data-page="newtab"] h2 { margin-top: 0; margin-bottom: 13px; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
+
+
+/* BIR visual polish pass — cohesive new-tab, settings and library surfaces. */
+:root {
+  --accent: #7558df;
+  --accent-soft: rgba(117, 88, 223, .11);
+  --bg: #f5f2fc;
+  --bg-elevated: #fff;
+  --bg-sunken: #ece7f7;
+  --bg-hover: rgba(99, 76, 170, .075);
+  --fg: #28243a;
+  --fg-dim: #827b99;
+  --border: rgba(69, 53, 115, .13);
+  --shadow: 0 10px 30px rgba(44, 31, 83, .07);
+}
+:root[data-theme="dark"] {
+  --accent: #b6a1ff;
+  --accent-soft: rgba(182, 161, 255, .14);
+  --bg: #191722;
+  --bg-elevated: #262333;
+  --bg-sunken: #13111c;
+  --bg-hover: rgba(208, 195, 255, .08);
+  --fg: #f3efff;
+  --fg-dim: #aaa2c3;
+  --border: rgba(218, 207, 255, .12);
+  --shadow: 0 10px 30px rgba(0, 0, 0, .2);
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] {
+    --accent: #b6a1ff;
+    --accent-soft: rgba(182, 161, 255, .14);
+    --bg: #191722;
+    --bg-elevated: #262333;
+    --bg-sunken: #13111c;
+    --bg-hover: rgba(208, 195, 255, .08);
+    --fg: #f3efff;
+    --fg-dim: #aaa2c3;
+    --border: rgba(218, 207, 255, .12);
+    --shadow: 0 10px 30px rgba(0, 0, 0, .2);
+  }
+}
+html, body { scroll-behavior: smooth; }
+::selection { background: rgba(139, 112, 230, .24); }
+.page-header { position: sticky; top: 0; z-index: 5; backdrop-filter: blur(18px); }
+.brand { color: var(--fg); font-weight: 750; }
+.brand::before { background: linear-gradient(145deg, #b49bff, #6d50ce); }
+.nav button { border: 1px solid transparent; }
+.nav button:hover { background: var(--bg-hover); }
+.nav button.active { border-color: var(--border); background: var(--accent-soft); color: var(--accent); box-shadow: none; }
+.content { padding-bottom: 100px; }
+h1 { color: var(--fg); }
+h2 { margin-top: 32px; }
+.card { background: var(--bg-elevated); border: 1px solid var(--border); box-shadow: var(--shadow); }
+button.action { cursor: pointer; }
+button.action:focus-visible, .nav button:focus-visible, .tile:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button.action.primary { border: 0; background: linear-gradient(135deg, #8b70e6, #6d50ce); }
+input, select { color: var(--fg); }
+input::placeholder { color: var(--fg-dim); opacity: .9; }
+.list-item { border: 1px solid transparent; transition: background 130ms ease, border-color 130ms ease; }
+.list-item:hover { border-color: var(--border); }
+.tile { background: color-mix(in srgb, var(--bg-elevated) 92%, var(--accent)); }
+.tile:hover { border-color: var(--accent); }
+body[data-page="newtab"] { min-height: 100%; background: radial-gradient(ellipse at 50% 4%, rgba(171, 145, 246, .23), transparent 43%), radial-gradient(ellipse at 90% 75%, rgba(115, 88, 223, .06), transparent 34%), var(--bg); }
+body[data-page="newtab"] .page-header { background: transparent; border-bottom-color: transparent; box-shadow: none; }
+body[data-page="newtab"] .content { max-width: 820px; padding-top: clamp(50px, 9vh, 108px); }
+body[data-page="newtab"] .clock { font-variant-numeric: tabular-nums; }
+body[data-page="newtab"] .newtab-search { max-width: 680px; margin-left: auto; margin-right: auto; }
+body[data-page="newtab"] .newtab-search input { background: color-mix(in srgb, var(--bg-elevated) 94%, var(--accent)); box-shadow: 0 12px 34px rgba(52, 35, 100, .09); }
+body[data-page="newtab"] .newtab-search input:focus { box-shadow: 0 0 0 4px var(--accent-soft), 0 12px 34px rgba(52, 35, 100, .09); }
+body[data-page="newtab"] .grid { max-width: 720px; margin-left: auto; margin-right: auto; }
+body[data-page="newtab"] h2 { display: flex; align-items: center; gap: 10px; }
+body[data-page="newtab"] h2::after { content: ""; height: 1px; flex: 1; background: var(--border); }
+@media (max-width: 680px) {
+  .page-header { position: static; }
+  .nav { display: flex; flex-wrap: wrap; }
+  body[data-page="newtab"] .content { padding-top: 34px; }
+  body[data-page="newtab"] h1 { font-size: 27px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+}
