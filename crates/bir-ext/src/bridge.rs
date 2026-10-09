@@ -47,6 +47,12 @@ pub fn decode(raw: &str) -> Option<BridgeEnvelope> {
   serde_json::from_str(raw).ok()
 }
 
+impl BridgeEnvelope {
+  pub fn decode(raw: &str) -> Option<Self> {
+    decode(raw)
+  }
+}
+
 /// Encode the reply to a [`BridgeRequest`].
 pub fn encode_resolve(req: u64, ok: bool, value: Value) -> String {
   let payload = serde_json::to_string(&value).unwrap_or_else(|_| "null".to_string());
