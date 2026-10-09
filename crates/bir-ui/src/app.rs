@@ -10,7 +10,7 @@ use std::{
   time::{Duration, Instant},
 };
 
-use bir_core::{ipc::{RequestToken, TabId, UiCommand, UiEvent, WindowId}, site_settings::Permission, time,
+use bir_core::{ipc::{RequestToken, TabId, UiCommand, UiEvent, WindowId}, site_settings::Permission, time, Persistent,
   url::{self as birurl, OmniboxInput}, ProfilePaths, Settings};
 use bir_ext::{
   background::{self, Alarm},
@@ -365,6 +365,7 @@ impl BrowserApp {
       memory: MemorySampler::new(),
       cpu: bir_perf::CpuSampler::new(),
       last_memory: MemorySnapshot::default(),
+      cpu_percent: 0.0,
       download_center,
       page_host,
       proxy: Some(proxy),
@@ -707,6 +708,7 @@ impl BrowserApp {
     let blocker = self.blocker.clone();
     let blocking = self.blocking.clone();
     let downloads = self.download_center.clone();
+    let downloads_started = downloads.clone();
     let scheme = BIR_SCHEME.to_string();
     let private = self
       .windows
@@ -897,7 +899,7 @@ impl BrowserApp {
         }
       })
       .with_download_started_handler(move |url: String, path: &mut PathBuf| -> bool {
-        let dir = match downloads.lock() {
+        let dir = match downloads_started.lock() {
           Ok(center) => center.dir.clone(),
           // A poisoned lock means something already panicked; refuse rather than write
           // to an unknown location.
@@ -905,7 +907,7 @@ impl BrowserApp {
         };
         let name = crate::commands::filename_from_url(&url);
         *path = bir_core::downloads::unique_path(&dir, &name);
-        if let Ok(mut center) = downloads.lock() {
+        if let Ok(mut center) = downloads_started.lock() {
           center.started.push((url, path.clone()));
         }
         true
@@ -1064,6 +1066,7 @@ impl BrowserApp {
         let theme = match theme {
           tao::window::Theme::Dark => bir_core::settings::Theme::Dark,
           tao::window::Theme::Light => bir_core::settings::Theme::Light,
+          _ => bir_core::settings::Theme::System,
         };
         if self.settings.appearance.theme == bir_core::settings::Theme::System {
           self.push_event(id, UiEvent::Theme { theme });
