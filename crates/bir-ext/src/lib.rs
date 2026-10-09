@@ -35,7 +35,7 @@ pub mod matches;
 pub mod permissions;
 pub mod registry;
 
-pub use bridge::{BridgeMessage, BridgeReply, ContentScriptInjection, EXTENSION_RUNTIME_JS};
+pub use bridge::{BridgeEnvelope, BridgeRequest, ScriptInjection, EXTENSION_RUNTIME_JS};
 pub use crx::{parse_crx, unpack_package, CrxInfo};
 pub use manifest::{ContentScriptDecl, Manifest, RunAt};
 pub use permissions::{PermissionSet, RiskLevel};
