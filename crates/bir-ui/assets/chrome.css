@@ -827,3 +827,98 @@ html, body { font-size: 13px; letter-spacing: .005em; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
+
+
+/* Arc-style sidebar layout: keep the new-tab action visible above the scrollable tabs. */
+#new-tab .new-tab-label { display: none; }
+:root[data-tabs="vertical"] body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+:root[data-tabs="vertical"] .tabstrip {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  padding: 10px 8px 8px;
+  gap: 8px;
+  overflow: hidden;
+  border: 0;
+  background: var(--bg);
+}
+:root[data-tabs="vertical"] #new-tab {
+  order: -1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  width: 100%;
+  min-height: 36px;
+  height: 36px;
+  margin: 0;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-elevated);
+  color: var(--fg);
+  font-size: 13px;
+  box-shadow: 0 1px 3px rgba(40, 28, 75, .05);
+  cursor: pointer;
+}
+:root[data-tabs="vertical"] #new-tab:hover {
+  border-color: var(--accent);
+  background: var(--bg-hover);
+}
+:root[data-tabs="vertical"] #new-tab .new-tab-symbol {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  background: var(--bg-sunken);
+  color: var(--accent);
+  font-size: 18px;
+  line-height: 1;
+}
+:root[data-tabs="vertical"] #new-tab .new-tab-label { display: inline; }
+:root[data-tabs="vertical"] .tabs {
+  order: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 0 0 4px;
+  scrollbar-width: thin;
+}
+:root[data-tabs="vertical"] .tab {
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  height: 36px;
+  padding: 0 10px;
+}
+:root[data-tabs="vertical"] .tab.pinned { max-width: none; }
+:root[data-tabs="vertical"] .toolbar {
+  flex: 0 0 auto;
+  height: auto;
+  min-height: 0;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 8px;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+}
+:root[data-tabs="vertical"] .toolbar .icon-button { width: 30px; height: 30px; }
+:root[data-tabs="vertical"] .omnibox { flex: 1 1 100%; min-width: 0; }
+:root[data-tabs="vertical"] .toolbar-right { margin-left: auto; }
