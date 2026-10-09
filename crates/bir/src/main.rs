@@ -4,7 +4,7 @@
 //! to open, and hands control to [`bir_ui`]. Everything else lives in the crates, so
 //! the same code paths run under the test suite as in the shipped app.
 
-use std::{error::Error as _, path::PathBuf};
+use std::path::PathBuf;
 
 use anyhow::{Context, Result};
 use bir_core::ProfilePaths;
@@ -69,6 +69,7 @@ fn run() -> Result<()> {
   app.startup = Startup { urls, private };
 
   app.run(event_loop);
+  Ok(())
 }
 
 fn cli() -> Command {
