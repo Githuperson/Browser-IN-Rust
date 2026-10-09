@@ -383,7 +383,7 @@ fn resolve(
       (true, Value::Null)
     }
     "alarms.clear" => {
-      let name = arg(0).as_str().unwrap_or_default();
+      let name = arg(0).as_str().unwrap_or_default().to_string();
       app.alarms.retain(|a| !(a.extension_id == ext && a.name == name));
       (true, json!(true))
     }
@@ -400,7 +400,7 @@ fn resolve(
         .collect();
       match ns {
         "alarms.get" => {
-          let name = arg(0).as_str().unwrap_or_default();
+          let name = arg(0).as_str().unwrap_or_default().to_string();
           match all.into_iter().find(|a| {
             a.get("name").and_then(|v| v.as_str()).unwrap_or_default() == name
           }) {
@@ -422,7 +422,7 @@ fn resolve(
       (true, Value::Null)
     }
     "contextMenus.remove" => {
-      let id = arg(0).as_str().unwrap_or_default();
+      let id = arg(0).as_str().unwrap_or_default().to_string();
       let list: Vec<Value> = app
         .menus
         .for_extension(ext)
@@ -439,7 +439,7 @@ fn resolve(
       (true, Value::Null)
     }
     "contextMenus.update" => {
-      let id = arg(0).as_str().unwrap_or_default();
+      let id = arg(0).as_str().unwrap_or_default().to_string();
       let update = arg(1);
       let mut list = app.menus.for_extension(ext);
       for menu in list.iter_mut() {
@@ -460,10 +460,10 @@ fn resolve(
 
     // ------------------------------------------------------------ i18n
     "i18n.getMessage" => {
-      let key = arg(0).as_str().unwrap_or_default();
+      let key = arg(0).as_str().unwrap_or_default().to_string();
       let messages = app.extensions.messages_json(ext);
       let value = messages
-        .get(key)
+        .get(&key)
         .and_then(|v| v.get("message"))
         .and_then(|v| v.as_str())
         .unwrap_or_default();
