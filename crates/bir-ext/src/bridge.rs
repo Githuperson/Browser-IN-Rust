@@ -81,7 +81,7 @@ pub fn encode_init(ext: &str, world: &str, manifest: &Value, messages: &Value) -
 }
 
 /// A content script (or background script) ready to be evaluated.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct ScriptInjection {
   pub extension_id: String,
   pub run_at: RunAt,
@@ -102,7 +102,7 @@ pub struct ScriptInjection {
 pub fn wrap_script(extension_id: &str, body: &str) -> String {
   format!(
     // One closing brace for the function, then the IIFE's closing paren and the call.
-    "(function(browser,chrome,__birExtId){{\n{body}\n})(__birExt.api({id}),__birExt.api({id}),{id});",
+    "(function(browser,chrome,__birExtId){{\n{body}\n}})(__birExt.api({id}),__birExt.api({id}),{id});",
     id = serde_json::to_string(extension_id).unwrap_or_else(|_| "\"\"".to_string())
   )
 }
@@ -115,7 +115,7 @@ pub fn encode_insert_css(css: &str) -> String {
   let css = serde_json::to_string(css).unwrap_or_else(|_| "\"\"".to_string());
   format!(
     "(function(){{var e=document.createElement('style');e.id='bir-ext-css';e.textContent={css};\
-     (document.head||document.documentElement).appendChild(e);})()"
+     (document.head||document.documentElement).appendChild(e);}})()"
   )
 }
 
