@@ -66,7 +66,9 @@ fn blocking_get(url: &str, max_bytes: usize) -> Result<String> {
 
   let text = response
     .body_mut()
-    .read_to_string(max_bytes)
+    .with_config()
+    .limit(max_bytes as u64)
+    .read_to_string()
     .map_err(|e| Error::Network(format!("{url}: reading body: {e}")))?;
   Ok(text)
 }
@@ -100,14 +102,10 @@ fn blocking_get_bytes(url: &str, max_bytes: usize) -> Result<Vec<u8>> {
     return Err(Error::Network(format!("{url}: HTTP {}", response.status())));
   }
 
-  // `Body` implements `std::io::Read`, so the size limit is enforced by `take` rather
-  // than by any HTTP-client-specific API.
-  use std::io::Read as _;
-  let mut buffer = Vec::new();
   response
     .body_mut()
-    .take(max_bytes as u64)
-    .read_to_end(&mut buffer)
-    .map_err(|e| Error::Network(format!("{url}: reading body: {e}")))?;
-  Ok(buffer)
+    .with_config()
+    .limit(max_bytes as u64)
+    .read_to_vec()
+    .map_err(|e| Error::Network(format!("{url}: reading body: {e}")) )
 }
