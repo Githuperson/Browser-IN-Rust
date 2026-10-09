@@ -336,6 +336,8 @@ impl BrowserApp {
 
     let page_host = Arc::new(PageHost::new(paths.extensions_dir()));
     let web_context = WebContext::new(Some(paths.webview_data_dir()));
+    // Build this before moving `settings` into the BrowserApp struct.
+    let scheduler = LifecycleScheduler::new(LifecyclePolicy::from_settings(&settings.performance));
 
     Ok(Self {
       paths,
@@ -361,7 +363,7 @@ impl BrowserApp {
       background: None,
       background_window: 0,
       background_attempted: false,
-      scheduler: LifecycleScheduler::new(LifecyclePolicy::from_settings(&settings.performance)),
+      scheduler,
       memory: MemorySampler::new(),
       cpu: bir_perf::CpuSampler::new(),
       last_memory: MemorySnapshot::default(),
