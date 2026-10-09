@@ -130,7 +130,7 @@ pub fn describe(permission: &str) -> &'static str {
     "sessions" => "Read and restore your open tabs",
     "search" => "Read and change your search engines",
     "windows" => "Open and arrange browser windows",
-    "commands" | "commands" => "Respond to keyboard shortcuts",
+    "commands" => "Respond to keyboard shortcuts",
     _ => "Use an API BIR does not have a description for",
   }
 }
