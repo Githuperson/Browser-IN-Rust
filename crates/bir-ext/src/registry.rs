@@ -20,7 +20,7 @@ use std::{
 };
 
 use bir_core::{ipc::ExtensionView, ProfilePaths};
-use sha2::Digest;
+use sha2::{Digest, Sha256};
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -35,12 +35,13 @@ use crate::{
 /// Largest single content/background script we will inline into a webview.
 const MAX_SCRIPT_BYTES: u64 = 2 * 1024 * 1024;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[serde(rename_all = "snake_case")]
 pub enum ExtensionKind {
   /// A directory on disk, loaded as-is (developer mode).
   Unpacked,
   /// Extracted from a `.crx` or `.zip`.
+  #[default]
   Packaged,
   /// Handed to the platform webview's own extension loader (WebView2 on Windows).
   Native,
