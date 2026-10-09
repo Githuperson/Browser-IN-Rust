@@ -72,8 +72,8 @@ impl Frame {
   pub fn clamped(mut self, bounds: (f64, f64)) -> Self {
     self.x = self.x.max(0.0);
     self.y = self.y.max(0.0);
-    self.width = self.width.min(bounds.0.saturating_sub(self.x)).max(1.0);
-    self.height = self.height.min(bounds.1.saturating_sub(self.y)).max(1.0);
+    self.width = self.width.min((bounds.0 - self.x).max(0.0)).max(1.0);
+    self.height = self.height.min((bounds.1 - self.y).max(0.0)).max(1.0);
     self
   }
 }
