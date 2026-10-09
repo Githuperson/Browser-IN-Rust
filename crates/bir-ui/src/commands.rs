@@ -992,3 +992,52 @@ fn open_path(path: &std::path::Path) {
     eprintln!("[bir] could not open {path_string}: {err}");
   }
 }
+
+#[cfg(test)]
+mod tests {
+  use super::*;
+
+  #[test]
+  fn filenames_come_from_the_last_path_segment() {
+    assert_eq!(filename_from_url("https://example.com/a/b/file.zip"), "file.zip");
+    assert_eq!(filename_from_url("https://example.com/a/b/file.zip?x=1"), "file.zip");
+    assert_eq!(filename_from_url("https://example.com/"), "download");
+    // A traversal attempt in a URL must not become a traversal on disk.
+    let sneaky = filename_from_url("https://example.com/a/..%2F..%2Fetc/passwd");
+    assert!(!sneaky.contains('/'), "{sneaky} kept a separator");
+    assert!(!sneaky.contains(".."), "{sneaky} kept a traversal");
+  }
+
+  #[test]
+  fn base64_round_trips() {
+    for input in [b"".as_slice(), b"a".as_slice(), b"ab".as_slice(), b"abc".as_slice(), b"hello world, this is a crx".as_slice()] {
+      let encoded = base64ish::encode(input);
+      assert_eq!(base64ish::decode(&encoded), input.to_vec(), "failed on {encoded}");
+    }
+  }
+
+  #[test]
+  fn page_signals_are_recognised() {
+    let event = route_message("{\"t\":\"audible\",\"audible\":true}", 1, Some(7));
+    assert!(matches!(event, AppEvent::PageSignal { tab: 7, .. }));
+  }
+
+  #[test]
+  fn unrecognised_messages_are_ignored_not_fatal() {
+    assert!(matches!(route_message("not json at all", 1, None), AppEvent::Ignored));
+    assert!(matches!(route_message("{}", 1, None), AppEvent::Ignored));
+  }
+
+  #[test]
+  fn commands_decode_from_the_chrome() {
+    let event = route_message("{\"t\":\"new_tab\",\"url\":null,\"foreground\":true,\"after\":null}", 3, None);
+    match event {
+      AppEvent::UiCommand { window, tab, command } => {
+        assert_eq!(window, 3);
+        assert!(tab.is_none());
+        assert!(matches!(command, UiCommand::NewTab { .. }));
+      }
+      other => panic!("expected a command, got something else"),
+    }
+  }
+}

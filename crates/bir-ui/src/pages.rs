@@ -446,3 +446,62 @@ const PAGE_BRIDGE_JS: &str = r#"
 pub fn bir_url(path: &str) -> String {
   format!("{BIR_SCHEME}://{path}")
 }
+
+#[cfg(test)]
+mod tests {
+  use super::*;
+
+  fn host() -> PageHost {
+    PageHost::new(std::env::temp_dir().join("bir-page-host-tests"))
+  }
+
+  /// The three platforms hand the URI over in different shapes; all three must end up
+  /// as the same `<host>/<path>` string.
+  #[test]
+  fn uri_shapes_normalise() {
+    assert_eq!(normalise_path("bir://chrome"), "chrome");
+    assert_eq!(normalise_path("bir://chrome.css"), "chrome.css");
+    assert_eq!(normalise_path("bir://page.css"), "page.css");
+    assert_eq!(normalise_path("bir://abcdefabcdefabcdefabcdefabcdefab/popup.html"),
+      "abcdefabcdefabcdefabcdefabcdefab/popup.html");
+    // Windows rewrites the scheme into a host.
+    assert_eq!(normalise_path("http://bir.chrome"), "chrome");
+    assert_eq!(normalise_path("http://bir.chrome/chrome.css"), "chrome/chrome.css");
+  }
+
+  #[test]
+  fn chrome_and_assets_are_served() {
+    let host = host();
+    for path in ["chrome", "chrome.css", "chrome.js", "page.css", "page.js"] {
+      let response = host.route(path);
+      assert_eq!(response.status(), 200, "{path} did not resolve");
+    }
+  }
+
+  #[test]
+  fn internal_pages_render() {
+    let host = host();
+    for name in ["newtab", "history", "bookmarks", "downloads", "settings", "extensions", "about"] {
+      let response = host.route(name);
+      assert_eq!(response.status(), 200, "{name} did not resolve");
+      let body = String::from_utf8_lossy(response.body()).into_owned();
+      assert!(body.contains(&format!("data-page=\"{name}\"")), "{name} was not tagged");
+    }
+  }
+
+  #[test]
+  fn unknown_paths_are_not_found() {
+    let host = host();
+    assert_eq!(host.route("nope").status(), 404);
+    // Traversal must never reach the filesystem, let alone escape it.
+    assert_eq!(host.route("../etc/passwd").status(), 404);
+    assert_eq!(host.route("someext/../../secrets").status(), 404);
+  }
+
+  #[test]
+  fn error_page_escapes_nothing_but_still_shows_the_url() {
+    let page = error_page("url=https%3A%2F%2Fexample.com&reason=timeout");
+    assert!(page.contains("https://example.com"));
+    assert!(page.contains("timeout"));
+  }
+}
