@@ -28,6 +28,7 @@
 //! `exclude_matches`), background service workers, and the `runtime`, `storage`, `tabs`,
 //! `scripting`, `alarms`, `notifications`, `contextMenus`, `cookies` and `i18n` APIs.
 
+pub mod background;
 pub mod bridge;
 pub mod crx;
 pub mod manifest;
