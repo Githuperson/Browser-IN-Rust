@@ -257,7 +257,7 @@ impl Default for Appearance {
   fn default() -> Self {
     Self {
       theme: Theme::System,
-      tab_layout: TabLayout::Horizontal,
+      tab_layout: TabLayout::Vertical,
       show_bookmarks_bar: false,
       compact: false,
       force_dark_web_contents: false,
