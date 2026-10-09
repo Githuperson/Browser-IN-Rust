@@ -171,20 +171,19 @@ impl HistoryStore {
       .filter_map(|entry| {
         let url_l = entry.url.to_ascii_lowercase();
         let title_l = entry.title.to_ascii_lowercase();
-        let mut score = 0f32;
-        if url_l == query {
-          score = 100.0;
+        let mut score = if url_l == query {
+          100.0
         } else if url_l.starts_with(&query) {
-          score = 80.0;
+          80.0
         } else if entry.domain.starts_with(&query) {
-          score = 60.0;
+          60.0
         } else if title_l.starts_with(&query) {
-          score = 50.0;
+          50.0
         } else if title_l.contains(&query) || url_l.contains(&query) {
-          score = 30.0;
+          30.0
         } else {
           return None;
-        }
+        };
         // Recency and frequency nudge, both bounded so they can never outrank a
         // genuinely better textual match.
         let age_days = time::now_secs().saturating_sub(entry.visit_at) / 86_400;

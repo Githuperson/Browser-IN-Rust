@@ -45,7 +45,8 @@ pub enum Error {
   #[error("json error: {0}")]
   Json(#[from] serde_json::Error),
   #[error("url parse error: {0}")]
-  Url(#[from] url::ParseError),
+  // `::url` — the crate, not this crate's own `url` module, which shadows it here.
+  Url(#[from] ::url::ParseError),
   #[error("{0}")]
   Other(String),
 }
