@@ -1,36 +1,39 @@
 <!doctype html>
-<!--
-  Shell for every internal page (bir://newtab, bir://history, bir://settings, ...).
-
-  One document renders all of them: the page name is baked into `data-page` by the
-  protocol handler, and `page.js` renders the matching section. Internal pages are
-  ordinary web content, so they get text selection, find-in-page and the platform's
-  own accessibility support for free.
--->
+<!-- Shared shell for BIR internal pages. -->
 <html lang="en" data-theme="system">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' bir: data:; script-src 'self' bir:; style-src 'self' bir: 'unsafe-inline'; img-src 'self' bir: data: https:;">
-<title>BIR</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BIR Browser</title>
 <link rel="stylesheet" href="bir://page.css">
 </head>
 <body data-page="{{PAGE}}">
-
-<header class="page-header">
-  <div class="brand">BIR</div>
-  <nav class="nav">
-    <button data-nav="newtab">New tab</button>
-    <button data-nav="history">History</button>
-    <button data-nav="bookmarks">Bookmarks</button>
-    <button data-nav="downloads">Downloads</button>
-    <button data-nav="extensions">Extensions</button>
-    <button data-nav="settings">Settings</button>
-    <button data-nav="about">About</button>
-  </nav>
-</header>
-
-<main id="content" class="content"></main>
-
+<div class="app-shell">
+  <aside class="app-sidebar">
+    <div class="app-brand"><span class="app-brand-mark">b</span><span><strong>BIR</strong><small>BROWSER</small></span></div>
+    <div class="sidebar-caption">WORKSPACE</div>
+    <div class="page-workspace"><span class="workspace-indicator"></span> Personal space <span class="workspace-arrow">⌄</span></div>
+    <div class="sidebar-caption nav-caption">LIBRARY</div>
+    <nav class="nav" aria-label="Browser">
+      <button data-nav="newtab"><span class="nav-icon">⌂</span><span>New tab</span></button>
+      <button data-nav="history"><span class="nav-icon">◷</span><span>History</span></button>
+      <button data-nav="bookmarks"><span class="nav-icon">☆</span><span>Bookmarks</span></button>
+      <button data-nav="downloads"><span class="nav-icon">↓</span><span>Downloads</span></button>
+      <button data-nav="extensions"><span class="nav-icon">◇</span><span>Extensions</span></button>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-footer">
+      <button data-nav="settings"><span class="nav-icon">⚙</span><span>Settings</span></button>
+      <button data-nav="about"><span class="nav-icon">ⓘ</span><span>About BIR</span></button>
+      <div class="sidebar-version"><span class="status-dot"></span> Private by design</div>
+    </div>
+  </aside>
+  <div class="page-main">
+    <header class="page-topbar"><div class="topbar-kicker">BIR / <span id="page-section">HOME</span></div><div class="topbar-status"><span class="status-dot"></span> Local browser data</div></header>
+    <main id="content" class="content"></main>
+  </div>
+</div>
 <script src="bir://page.js"></script>
 </body>
 </html>
