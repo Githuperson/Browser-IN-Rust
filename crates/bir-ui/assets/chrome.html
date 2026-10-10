@@ -12,6 +12,33 @@
 <meta charset="utf-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' bir: data:; script-src 'self' bir:; style-src 'self' bir: 'unsafe-inline'; img-src 'self' bir: data: https:; font-src 'self' bir: data:">
 <title>BIR</title>
+<style>
+/* Critical fallback: keep the browser visibly styled even if bir://chrome.css fails to load. */
+:root{--bg:#f4f6fb;--panel:#fff;--fg:#20283b;--muted:#77829a;--line:#dfe4ef;--accent:#4268f5}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--fg);font:13px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.tabstrip{display:flex;align-items:center;gap:6px;padding:5px 8px 0;background:var(--bg);border-bottom:1px solid var(--line)}
+.tabs{display:flex;align-items:center;gap:4px;flex:1;min-width:0;overflow:auto}
+.tab{display:flex;align-items:center;gap:8px;min-width:42px;max-width:230px;height:35px;padding:0 10px;overflow:hidden;border-radius:10px 10px 0 0;background:transparent;color:var(--muted)}
+.tab.active{background:var(--panel);color:var(--fg);box-shadow:inset 0 2px var(--accent)}
+.toolbar{display:flex;align-items:center;gap:5px;padding:8px 10px;background:var(--bg)}
+.icon-button{width:31px;height:31px;border:0;border-radius:9px;background:transparent;color:var(--muted)}
+.omnibox{display:flex;align-items:center;gap:8px;flex:1;min-width:60px;height:35px;padding:0 10px;border:1px solid var(--line);border-radius:11px;background:var(--panel)}
+.omnibox-input{flex:1;min-width:0;border:0;outline:0;background:transparent;color:var(--fg)}
+:root[data-tabs="vertical"] body{display:flex;flex-direction:column}
+:root[data-tabs="vertical"] .tabstrip{flex:1;min-height:0;flex-direction:column;align-items:stretch;padding:13px 10px 8px}
+:root[data-tabs="vertical"] .sidebar-brand{display:flex;align-items:center;gap:9px;padding:0 5px 5px}
+:root[data-tabs="vertical"] .brand-mark{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:9px;background:linear-gradient(145deg,#547af8,#805ce6);color:#fff;font-weight:800}
+:root[data-tabs="vertical"] .brand-name{font-weight:800;letter-spacing:.15em}
+:root[data-tabs="vertical"] .brand-edition,:root[data-tabs="vertical"] .tab-section-label{display:block;color:var(--muted);font-size:9px;font-weight:800;letter-spacing:.12em}
+:root[data-tabs="vertical"] .workspace-label{display:flex;gap:8px;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+:root[data-tabs="vertical"] .tabs{flex-direction:column;align-items:stretch}
+:root[data-tabs="vertical"] .tab{width:100%;max-width:none;flex:0 0 36px;border-radius:9px}
+:root[data-tabs="vertical"] #new-tab{width:100%;height:36px;border:1px dashed var(--line);border-radius:9px}
+:root[data-tabs="vertical"] .new-tab-label,:root[data-tabs="vertical"] .sidebar-brand,:root[data-tabs="vertical"] .workspace-label,:root[data-tabs="vertical"] .tab-section-label{display:flex}
+:root[data-tabs="vertical"] .toolbar{flex-wrap:wrap;border-top:1px solid var(--line);background:var(--panel)}
+:root[data-tabs="vertical"] .toolbar-caption{display:block;width:100%;font-size:9px;font-weight:800;letter-spacing:.12em;color:var(--muted)}
+:root[data-tabs="vertical"] .omnibox{flex:1 1 100%}
+</style>
 <link rel="stylesheet" href="bir://chrome.css">
 </head>
 <body>
