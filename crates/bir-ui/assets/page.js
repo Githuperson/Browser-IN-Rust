@@ -83,6 +83,14 @@
   function render() {
     if (!content) { return; }
     content.textContent = '';
+    var section = document.getElementById('page-section');
+    var sectionNames = {
+      newtab: 'HOME', history: 'HISTORY', bookmarks: 'BOOKMARKS',
+      downloads: 'DOWNLOADS', settings: 'SETTINGS', extensions: 'EXTENSIONS',
+      about: 'ABOUT BIR'
+    };
+    if (section) { section.textContent = sectionNames[state.page] || 'BROWSER'; }
+    document.title = (sectionNames[state.page] || 'BROWSER') + ' — BIR';
     var buttons = document.querySelectorAll('.nav button');
     for (var i = 0; i < buttons.length; i++) {
       buttons[i].className = buttons[i].dataset.nav === state.page ? 'active' : '';
